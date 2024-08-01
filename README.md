@@ -29,7 +29,10 @@ Create a mobile application using React Native that encompasses the following:
 - Create a fork of this repository.
 - Use React Native and TypeScript.
 - Ensure the app works on iOS and Android.
-- Showcase your software’s testing capabilities to ensure it meets requirements.
+- Showcase your software’s testing capabilities to ensure it meets requirements by testing:
+   - One complex component.
+   - One helper function.
+   - One API request.
 - Ensure that your solution accounts for edge cases and handles unusual or unexpected scenarios effectively.
 - Don’t spend longer than 2 hours on this technical test.
 - Don’t focus too much time on the visual aspects of the app, favour simple layouts and basic styling using React Native libraries over using a UI kit.
