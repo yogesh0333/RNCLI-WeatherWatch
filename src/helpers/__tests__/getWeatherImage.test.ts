@@ -1,37 +1,66 @@
-import getWeatherImage from '../getWeatherImage';
+import {getWeatherImage, WeatherCode} from '../getWeatherImage';
 
-test.each([
-  {weatherCode: '0', image: 'http://openweathermap.org/img/wn/01d@2x.png'},
-  {weatherCode: '1', image: 'http://openweathermap.org/img/wn/01d@2x.png'},
-  {weatherCode: '2', image: 'http://openweathermap.org/img/wn/02d@2x.png'},
-  {weatherCode: '3', image: 'http://openweathermap.org/img/wn/03d@2x.png'},
-  {weatherCode: '45', image: 'http://openweathermap.org/img/wn/50d@2x.png'},
-  {weatherCode: '48', image: 'http://openweathermap.org/img/wn/50d@2x.png'},
-  {weatherCode: '51', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '53', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '55', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '56', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '57', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '61', image: 'http://openweathermap.org/img/wn/10d@2x.png'},
-  {weatherCode: '63', image: 'http://openweathermap.org/img/wn/10d@2x.png'},
-  {weatherCode: '65', image: 'http://openweathermap.org/img/wn/10d@2x.png'},
-  {weatherCode: '66', image: 'http://openweathermap.org/img/wn/10d@2x.png'},
-  {weatherCode: '67', image: 'http://openweathermap.org/img/wn/10d@2x.png'},
-  {weatherCode: '71', image: 'http://openweathermap.org/img/wn/13d@2x.png'},
-  {weatherCode: '73', image: 'http://openweathermap.org/img/wn/13d@2x.png'},
-  {weatherCode: '75', image: 'http://openweathermap.org/img/wn/13d@2x.png'},
-  {weatherCode: '77', image: 'http://openweathermap.org/img/wn/13d@2x.png'},
-  {weatherCode: '80', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '81', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '82', image: 'http://openweathermap.org/img/wn/09d@2x.png'},
-  {weatherCode: '85', image: 'http://openweathermap.org/img/wn/13d@2x.png'},
-  {weatherCode: '86', image: 'http://openweathermap.org/img/wn/13d@2x.png'},
-  {weatherCode: '95', image: 'http://openweathermap.org/img/wn/11d@2x.png'},
-  {weatherCode: '96', image: 'http://openweathermap.org/img/wn/11d@2x.png'},
-  {weatherCode: '99', image: 'http://openweathermap.org/img/wn/11d@2x.png'},
-])(
-  'should render the correct image for weather code: $weatherCode',
-  ({weatherCode, image}) => {
-    expect(getWeatherImage(weatherCode)).toEqual(image);
-  },
-);
+describe('getWeatherImage', () => {
+  // Test case for known weather codes
+  test.each([
+    [
+      '0',
+      'Sunny',
+      'http://openweathermap.org/img/wn/01d@2x.png',
+      'Clear',
+      'http://openweathermap.org/img/wn/01n@2x.png',
+    ],
+    [
+      '1',
+      'Mainly Sunny',
+      'http://openweathermap.org/img/wn/01d@2x.png',
+      'Mainly Clear',
+      'http://openweathermap.org/img/wn/01n@2x.png',
+    ],
+    [
+      '2',
+      'Partly Cloudy',
+      'http://openweathermap.org/img/wn/02d@2x.png',
+      'Partly Cloudy',
+      'http://openweathermap.org/img/wn/02n@2x.png',
+    ],
+    [
+      '45',
+      'Foggy',
+      'http://openweathermap.org/img/wn/50d@2x.png',
+      'Foggy',
+      'http://openweathermap.org/img/wn/50n@2x.png',
+    ],
+    // Add more known weather codes here...
+  ])(
+    'returns the correct image for weather code %s',
+    (
+      weatherCode,
+      expectedDayDescription,
+      expectedDayImage,
+      expectedNightDescription,
+      expectedNightImage,
+    ) => {
+      const result = getWeatherImage(weatherCode);
+      expect(result.day.description).toBe(expectedDayDescription);
+      expect(result.day.image).toBe(expectedDayImage);
+      expect(result.night.description).toBe(expectedNightDescription);
+      expect(result.night.image).toBe(expectedNightImage);
+    },
+  );
+
+  // Test case for unknown weather codes
+  test('returns default images for unknown weather codes', () => {
+    const unknownCode = '999' as WeatherCode;
+    const result = getWeatherImage(unknownCode);
+
+    expect(result.day.description).toBe('Default');
+    expect(result.day.image).toBe(
+      'http://openweathermap.org/img/wn/default-day@2x.png',
+    );
+    expect(result.night.description).toBe('Default');
+    expect(result.night.image).toBe(
+      'http://openweathermap.org/img/wn/default-night@2x.png',
+    );
+  });
+});

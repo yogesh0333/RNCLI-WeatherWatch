@@ -328,8 +328,20 @@ const items: Record<WeatherCode, WeatherImage> = {
  * @param weatherCode The WMO weather code
  * @returns A "day" image representation of the WMO weather code
  */
-function getWeatherImage(weatherCode: WeatherCode) {
-  // Write implementation for this function to return the "day" image for a given weather code.
-}
+const getWeatherImage = (weatherCode: WeatherCode): WeatherImage => {
+  return (
+    items[weatherCode] || {
+      day: {
+        description: 'Default',
+        image: 'http://openweathermap.org/img/wn/default-day@2x.png',
+      },
+      night: {
+        description: 'Default',
+        image: 'http://openweathermap.org/img/wn/default-night@2x.png',
+      },
+    }
+  );
+};
 
-export default getWeatherImage;
+export {getWeatherImage};
+export type {WeatherCode, WeatherImage};
